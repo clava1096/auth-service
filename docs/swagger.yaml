@@ -1,0 +1,230 @@
+basePath: /
+definitions:
+  models.ErrorResponse:
+    properties:
+      error:
+        type: string
+    type: object
+  models.Logout:
+    properties:
+      msg:
+        type: string
+    type: object
+  models.TokenRequest:
+    properties:
+      access_token:
+        type: string
+      refresh_token:
+        type: string
+    type: object
+  models.TokenResponse:
+    properties:
+      access_token:
+        type: string
+      refresh_token:
+        type: string
+    type: object
+  models.User:
+    properties:
+      createdAt:
+        type: string
+      deletedAt:
+        type: string
+      guid:
+        type: string
+      updatedAt:
+        type: string
+    type: object
+  models.UserResponse:
+    properties:
+      guid:
+        type: string
+    type: object
+host: 127.0.0.1:8080
+info:
+  contact:
+    email: obvintseff.vyacheslav@yandex.ru
+    name: Vyacheslav
+  description: |-
+    JWT-авторизация с refresh-токенами.
+    Все ошибки возвращаются в формате:
+    ```json
+    {"error": "описание ошибки"}
+    ```
+  license:
+    name: UNLICENSED
+    url: https://medods.yonote.ru/share/1982193d-43fc-4075-a608-cc0687c5eac2/doc/testovoe-zadanie-na-poziciyu-junior-backend-developer-6iFFklIyMI
+  termsOfService: http://swagger.io/terms/
+  title: Тестовое задание на позицию Junior Backend Developer
+  version: "1.0"
+paths:
+  /api/get-users-GUID:
+    get:
+      consumes:
+      - application/json
+      description: Возвращает список GUID всех пользователей в системе
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/models.User'
+            type: array
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/models.ErrorResponse'
+      summary: Получить список всех пользователей. Этот маршрут добавлен для удобство
+        проверяющего!
+      tags:
+      - Пользователь
+  /api/logout:
+    post:
+      consumes:
+      - application/json
+      description: Удаляет refresh токен пользователя
+      parameters:
+      - description: Запрос с токенами
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/models.TokenRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.Logout'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/models.ErrorResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/models.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/models.ErrorResponse'
+      summary: Выход из системы
+      tags:
+      - Аутентификация
+  /api/me:
+    post:
+      consumes:
+      - application/json
+      description: Возвращает GUID пользователя по валидному access токену
+      parameters:
+      - description: Запрос с access токеном
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/models.TokenRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.UserResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/models.ErrorResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/models.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/models.ErrorResponse'
+      summary: Получить информацию о пользователе
+      tags:
+      - Пользователь
+  /api/refresh:
+    post:
+      consumes:
+      - application/json
+      description: Обновляет пару access/refresh токенов по валидному refresh токену
+      parameters:
+      - description: Запрос с токенами
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/models.TokenRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.TokenResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/models.ErrorResponse'
+        "403":
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/models.ErrorResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/models.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/models.ErrorResponse'
+      summary: Обновить токены
+      tags:
+      - Аутентификация
+  /api/tokens:
+    get:
+      consumes:
+      - application/json
+      description: Генерирует пару access/refresh токенов для пользователя
+      parameters:
+      - description: GUID пользователя
+        in: query
+        name: guid
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.TokenResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/models.ErrorResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/models.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/models.ErrorResponse'
+      summary: Получить токены
+      tags:
+      - Аутентификация
+schemes:
+- http
+- https
+securityDefinitions:
+  ApiKeyAuth:
+    in: header
+    name: Authorization
+    type: apiKey
+swagger: "2.0"

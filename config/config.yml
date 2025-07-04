@@ -1,0 +1,18 @@
+application:
+  host: localhost
+  prefix: app-
+  port: 8080
+  name: app
+postgres:
+  host: db
+  port: 5432
+  user: postgres
+  database: auth_service
+  password: postgres
+usr:
+  count: 10 # количество пользователей
+jwt:
+  issuer: "www.issuer.com"
+  secret_key: "super-secret"
+webhook:
+  url: "" # указываем необходимый IP для отправки веб-хука
