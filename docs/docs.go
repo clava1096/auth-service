@@ -35,14 +35,14 @@ const docTemplate = `{
                 "tags": [
                     "Пользователь"
                 ],
-                "summary": "Получить список всех пользователей. Этот маршрут добавлен для удобство проверяющего!",
+                "summary": "Получить список всех пользователей. Этот маршрут добавлен для удобства проверяющего!",
                 "responses": {
                     "200": {
                         "description": "OK",
                         "schema": {
                             "type": "array",
                             "items": {
-                                "$ref": "#/definitions/models.User"
+                                "$ref": "#/definitions/models.UserResponse"
                             }
                         }
                     },
@@ -303,23 +303,6 @@ const docTemplate = `{
                     "type": "string"
                 },
                 "refresh_token": {
-                    "type": "string"
-                }
-            }
-        },
-        "models.User": {
-            "type": "object",
-            "properties": {
-                "createdAt": {
-                    "type": "string"
-                },
-                "deletedAt": {
-                    "type": "string"
-                },
-                "guid": {
-                    "type": "string"
-                },
-                "updatedAt": {
                     "type": "string"
                 }
             }

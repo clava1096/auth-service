@@ -24,17 +24,6 @@ definitions:
       refresh_token:
         type: string
     type: object
-  models.User:
-    properties:
-      createdAt:
-        type: string
-      deletedAt:
-        type: string
-      guid:
-        type: string
-      updatedAt:
-        type: string
-    type: object
   models.UserResponse:
     properties:
       guid:
@@ -70,13 +59,13 @@ paths:
           description: OK
           schema:
             items:
-              $ref: '#/definitions/models.User'
+              $ref: '#/definitions/models.UserResponse'
             type: array
         "500":
           description: Internal Server Error
           schema:
             $ref: '#/definitions/models.ErrorResponse'
-      summary: Получить список всех пользователей. Этот маршрут добавлен для удобство
+      summary: Получить список всех пользователей. Этот маршрут добавлен для удобства
         проверяющего!
       tags:
       - Пользователь

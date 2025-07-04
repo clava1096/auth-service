@@ -25,25 +25,14 @@ func NewTokenHandler(tokenService *services.TokenService, userService *services.
 }
 
 // GetAllUsers godoc
-// @Summary Получить список всех пользователей. Этот маршрут добавлен для удобство проверяющего!
+// @Summary Получить список всех пользователей. Этот маршрут добавлен для удобства проверяющего!
 // @Description Возвращает список GUID всех пользователей в системе
 // @Tags Пользователь
 // @Accept json
 // @Produce json
-// @Success 200 {array} models.User
+// @Success 200 {array} models.UserResponse
 // @Failure 500 {object} models.ErrorResponse
 // @Router /api/get-users-GUID [get]
-//
-// @ExampleRequest
-// curl -X GET "http://localhost:8080/api/get-users-GUID"
-//
-// @ExampleResponse 200
-// [
-//
-//	{"guid": "a1b2c3d4-e5f6-7890"},
-//	{"guid": "b2c3d4e5-f6a7-8901"}
-//
-// ]
 func (h *TokenH) GetAllUsers(ctx *fiber.Ctx) error {
 	u, _ := h.userService.GetUsers()
 	if len(u) == 0 {
@@ -71,22 +60,6 @@ func (h *TokenH) GetAllUsers(ctx *fiber.Ctx) error {
 // @Failure 404 {object} models.ErrorResponse
 // @Failure 500 {object} models.ErrorResponse
 // @Router /api/tokens [get]
-//
-// @ExampleRequest
-// curl -X GET "http://localhost:8080/api/tokens?guid=a1b2c3d4-e5f6-7890"
-//
-// @ExampleResponse 200
-//
-//	{
-//	  "access_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...",
-//	  "refresh_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
-//	}
-//
-// @ExampleResponse 400
-// {"error": "Bad Request"}
-//
-// @ExampleResponse 403
-// {"error": "Your refresh token is valid and time not expired"}
 func (h *TokenH) TokenHandler(ctx *fiber.Ctx) error {
 	guid := ctx.Query("guid")
 	userAgent := ctx.Get("User-Agent")
@@ -127,21 +100,6 @@ func (h *TokenH) TokenHandler(ctx *fiber.Ctx) error {
 // @Failure 404 {object} models.ErrorResponse
 // @Failure 500 {object} models.ErrorResponse
 // @Router /api/refresh [post]
-//
-// @ExampleRequest
-// curl -X POST "http://localhost:8080/api/refresh" \
-// -H "Content-Type: application/json" \
-// -d '{"access_token":"old_token", "refresh_token":"old_refresh_token"}'
-//
-// @ExampleResponse 200
-//
-//	{
-//	  "access_token": "new_token",
-//	  "refresh_token": "new_refresh_token"
-//	}
-//
-// @ExampleResponse 403
-// {"error": "Your User-Agent is edited, logout"}
 func (h *TokenH) RefreshTokenHandler(ctx *fiber.Ctx) error {
 	req, err := h.parseTokenRequest(ctx)
 	if err != nil {
@@ -205,17 +163,6 @@ func (h *TokenH) RefreshTokenHandler(ctx *fiber.Ctx) error {
 // @Failure 404 {object} models.ErrorResponse
 // @Failure 500 {object} models.ErrorResponse
 // @Router /api/me [post]
-//
-// @ExampleRequest
-// curl -X POST "http://localhost:8080/api/me" \
-// -H "Content-Type: application/json" \
-// -d '{"access_token":"your_token"}'
-//
-// @ExampleResponse 200
-// {"user_guid": "a1b2c3d4-e5f6-7890"}
-//
-// @ExampleResponse 404
-// {"error": "Not Found!"}
 func (h *TokenH) GetUser(ctx *fiber.Ctx) error {
 	req, err := h.parseTokenRequest(ctx)
 	if err != nil {
@@ -247,17 +194,6 @@ func (h *TokenH) GetUser(ctx *fiber.Ctx) error {
 // @Failure 404 {object} models.ErrorResponse
 // @Failure 500 {object} models.ErrorResponse
 // @Router /api/logout [post]
-//
-// @ExampleRequest
-// curl -X POST "http://localhost:8080/api/logout" \
-// -H "Content-Type: application/json" \
-// -d '{"access_token":"your_token"}'
-//
-// @ExampleResponse 200
-// {"msg": "Ok."}
-//
-// @ExampleResponse 500
-// {"error": "Internal Server Error"}
 func (h *TokenH) Logout(ctx *fiber.Ctx) error {
 	req, err := h.parseTokenRequest(ctx)
 	if err != nil {
