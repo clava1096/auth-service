@@ -75,7 +75,7 @@ webhook:
 
 ## Пример запроса на получение GUID пользователей
 ```bash
-curl -X GET "http://localhost:3000/api/get-users-GUID"
+curl -X GET "http://localhost:8080/api/get-users-GUID"
 ```
 
 Пример ответа:
